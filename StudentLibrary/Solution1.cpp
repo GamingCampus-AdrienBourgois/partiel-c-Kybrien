@@ -1,16 +1,18 @@
 #include "Solution1.h"
-
 // Don't fortget to enable the exercise in the SudentConfiguration.h file !
+//C'est bon :)
+
+
 #include "StudentConfiguration.h"
 #ifdef COMPILE_EXERCICE_1
 
 float Solution1::ConvertTemperature(float _value, TemperatureUnits _from, TemperatureUnits _to){
 	
-    //si _from et _to sont les memes on retourne la valeur
+    //si _from et _to sont les memes on retourne la valeur (logique)
 	if (_from == _to) {
 		return _value;
 	}
-    //on regarde en fonction de la valeur de _from
+    //on regarde en fonction de la valeur de base (_from)
     switch (_from){
     case TemperatureUnits::CELSIUS:
         switch (_to)
