@@ -12,36 +12,41 @@
 
 float Solution2::GetBalance(const std::string& accountName)
 {
-    //On s'occupe d'abord la lecture du fichier comme tu l'as demande
+    // On construit le chemin du fichier à lire pour le retrouver dans le dossier BankAccount
     std::string filePath = "BankAccount/" + accountName + ".txt";
 
-    //Puis ouvre le fichier
+    // On l'ouvre en lecture
     std::ifstream file(filePath);
 
     if (!file.is_open()) {
         // Lever une exception si le fichier n'a pas pu être ouvert
-        throw std::runtime_error("Impossible d'ouvrir le fichier :( -> " + filePath);
+        throw std::runtime_error("Unable to open file: " + filePath);
     }
 
-    //On fait toutes les variables dont on aura besoin
-    float balance = 0.0f;
+    // Variables pour stocker les opérations du compte
+    std::string operationType;
     float amount;
-    char operationType;
-    
-    
+    float balance = 0.0f;
 
-    //On lit le fichier
-    while (file >> operationType >> amount) {
-        // On met a jour le solde en fonction du type d'opération (dépôt+ ou retrait-)
-        if (operationType == '+') {
+    // Lire chaque ligne du fichier
+    std::string line;
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        if (!(iss >> operationType >> amount)) {
+            // Lever une exception en cas de ligne invalide
+            throw std::invalid_argument("Ligne non valide dans ce fichier :( -> " + filePath);
+        }
+
+        // On met a jour le solde en fonction du type d'opération
+        if (operationType == "DEPOSIT") {
             balance += amount;
         }
-        else if (operationType == '-') {
+        else if (operationType == "WITHDRAW") {
             balance -= amount;
         }
         else {
-            // Exception au cas ou ca marche pas on sait jamais
-            throw std::invalid_argument("Operation invalide dans ce fichier :( -> " + filePath);
+            // Exception en cas d'opération invalide :(
+            throw std::invalid_argument("Invalid operation type in file: " + filePath);
         }
     }
 
